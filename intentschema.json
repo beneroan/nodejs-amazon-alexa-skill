@@ -1,7 +1,7 @@
 {
     "interactionModel": {
         "languageModel": {
-            "invocationName": "beneroan laundry",
+            "invocationName": "lit laundry",
             "intents": [
                 {
                     "name": "AMAZON.CancelIntent",
