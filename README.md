@@ -9,4 +9,4 @@ needs request for https get and rest api
 npm install request
 ```
 
-compress with node modules
+compress with node modules and upload via s3
