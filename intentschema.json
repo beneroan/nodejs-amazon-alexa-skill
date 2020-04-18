@@ -1,0 +1,222 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "beneroan laundry",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "CheckAvailIntent",
+                    "slots": [
+                        {
+                            "name": "Wing",
+                            "type": "Wing"
+                        }
+                    ],
+                    "samples": [
+                        "if a laundry machine is open",
+                        "if a laundry machine is available",
+                        "if i can do my laundry",
+                        "if the laundry machines are open",
+                        "if i can do my laundry now"
+                    ]
+                },
+                {
+                    "name": "CheckFireIntent",
+                    "slots": [],
+                    "samples": [
+                        "if there is a fire"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "Wing",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "d300"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "c300"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "b300"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "a300"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "d200"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "c200"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "b200"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "a200"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "d100"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "c100"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "b100"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "a100"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "d. three hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "c. three hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "b. three hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "a. three hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "d. two hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "c. two hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "b. two hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "a. two hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "d. one hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "c. one hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "b. one hundred"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "a. one hundred"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "CheckAvailIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Wing",
+                            "type": "Wing",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.445500471988.423491289112"
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.445500471988.423491289112.717870993082"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
+        },
+        "prompts": [
+            {
+                "id": "Slot.Validation.445500471988.423491289112.717870993082",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What is your wing?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.445500471988.423491289112",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What is your wing?"
+                    }
+                ]
+            }
+        ]
+    }
+}
