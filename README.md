@@ -1,2 +1,2 @@
 # nodejs-amazon-alexa-skill
-amazon alexa skill for beneroan laundry machine applications
+amazon alexa skill for beneroan laundry machine applications lol
