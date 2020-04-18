@@ -58,6 +58,8 @@ function onIntent(intentRequest, session, callback) {
 
     if (intentName == "CheckAvailIntent") {
         handleCheckAvailIntent(intent, session, callback)
+    } else if (intentName == "CheckFireIntent") {
+        handleCheckFireIntent(intent, session, callback)
     } else {
          throw "Invalid intent"
     }
@@ -93,7 +95,7 @@ function handleCheckAvailIntent(intent, session, callback) {
 
     var speechOutput = "The TAMS magical laundry server pulled an L. Please wait and try again."
 
-    getJSON(function(data) {
+    getAvailJSON(function(data) {
         if (data != "ERROR") {
             var speechOutput = data
         }
@@ -102,12 +104,29 @@ function handleCheckAvailIntent(intent, session, callback) {
 
 }
 
-function url() {
+function handleCheckFireIntent(intent, session, callback) {
+
+    var speechOutput = "The TAMS magical laundry server pulled an L. Please wait and try again."
+
+    getFireJSON(function(data) {
+        if (data != "ERROR") {
+            var speechOutput = data
+        }
+        callback(session.attributes, buildSpeechletResponseWithoutCard(speechOutput, "", true))
+    })
+
+}
+
+function availUrl() {
     return "http://nationalpark.fun:5000/status/machine"
 }
 
-function getJSON(callback) {
-    request.get(url(), function(error, response, body) {
+function fireUrl() {
+    return "http://nationalpark.fun:5000/status/fire"
+}
+
+function getAvailJSON(callback) {
+    request.get(availUrl(), function(error, response, body) {
         var d = JSON.parse(body)
         var result = d.free
 
@@ -116,6 +135,23 @@ function getJSON(callback) {
                 callback("At least one of the laundry machines are open. Hurry before someone takes it!")
             } else {
                 callback("Both of the laundry machines are currently in use. Check again soon.")
+            }
+        } else {
+            callback("ERROR")
+        }
+    })
+}
+
+function getFireJSON(callback) {
+    request.get(fireUrl(), function(error, response, body) {
+        var d = JSON.parse(body)
+        var result = d.fire
+
+        if (result != undefined) {
+            if (result == true) {
+                callback("HURRY UP AND GET OUT. Also, might wanna go to the doctor cuz you should've heard the fire alarm approximately a long time ago.")
+            } else {
+                callback("Nope. No Fire...yet.")
             }
         } else {
             callback("ERROR")
