@@ -144,7 +144,6 @@ function fireURL() {
 function getAvailJSON(callback, wing) {
     request.get(availURL(), function(error, response, body) {
         var d = JSON.parse(body)
-        // change to var result = d.wing.free after api is complete
         var result = d.free
 
         if (result != undefined) {
