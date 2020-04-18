@@ -91,6 +91,10 @@ function getWelcomeResponse(callback) {
 
 }
 
+
+/**
+ * Called when the user invokes the CheckAvailIntent (to check availability of laundry machines).
+ */
 function handleCheckAvailIntent(intent, session, callback) {
 
     var speechOutput = "The TAMS magical laundry server pulled an L. Please wait and try again."
@@ -104,6 +108,9 @@ function handleCheckAvailIntent(intent, session, callback) {
 
 }
 
+/**
+ * Called when the user invokes the CheckFireIntent (to check if there is a fire).
+ */
 function handleCheckFireIntent(intent, session, callback) {
 
     var speechOutput = "The TAMS magical laundry server pulled an L. Please wait and try again."
@@ -117,16 +124,25 @@ function handleCheckFireIntent(intent, session, callback) {
 
 }
 
-function availUrl() {
+/**
+ * URL to check for laundry machine availability
+ */
+function availURL() {
     return "http://nationalpark.fun:5000/status/machine"
 }
 
-function fireUrl() {
+/**
+ * URL to check for fire and smoke
+ */
+function fireURL() {
     return "http://nationalpark.fun:5000/status/fire"
 }
 
+/**
+ * Parse JSON data from availURL
+ */
 function getAvailJSON(callback) {
-    request.get(availUrl(), function(error, response, body) {
+    request.get(availURL(), function(error, response, body) {
         var d = JSON.parse(body)
         var result = d.free
 
@@ -142,8 +158,11 @@ function getAvailJSON(callback) {
     })
 }
 
+/**
+ * Parse JSON data from fireURL
+ */
 function getFireJSON(callback) {
-    request.get(fireUrl(), function(error, response, body) {
+    request.get(fireURL(), function(error, response, body) {
         var d = JSON.parse(body)
         var result = d.fire
 
@@ -160,8 +179,8 @@ function getFireJSON(callback) {
 }
 
 
-// ------- Helper functions to build responses for Alexa -------
 
+// ------- Helper functions to build responses for Alexa -------
 
 function buildSpeechletResponse(title, output, repromptText, shouldEndSession) {
     return {
