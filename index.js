@@ -1,20 +1,13 @@
 
 var request = require("request")
 
-// Route the incoming request based on type (LaunchRequest, IntentRequest,
-// etc.) The JSON body of the request is provided in the event parameter.
 exports.handler = function (event, context) {
     try {
         console.log("event.session.application.applicationId=" + event.session.application.applicationId);
 
-        /**
-         * Uncomment this if statement and populate with your skill's application ID to
-         * prevent someone else from configuring a skill that sends requests to this function.
-         */
-
-    // if (event.session.application.applicationId !== "") {
-    //     context.fail("Invalid Application ID");
-    //  }
+        if (event.session.application.applicationId !== "amzn1.ask.skill.1f001cc0-dbc9-4a35-9b51-38e5937a4826") {
+            context.fail("Invalid Application ID");
+        }
 
         if (event.session.new) {
             onSessionStarted({requestId: event.request.requestId}, event.session);
@@ -45,7 +38,7 @@ exports.handler = function (event, context) {
  * Called when the session starts.
  */
 function onSessionStarted(sessionStartedRequest, session) {
-    // add any session init logic here
+
 }
 
 /**
@@ -63,9 +56,8 @@ function onIntent(intentRequest, session, callback) {
     var intent = intentRequest.intent
     var intentName = intentRequest.intent.name;
 
-    // dispatch custom intents to handlers here
-    if (intentName == "GetInfoIntent") {
-        handleGetInfoIntent(intent, session, callback)
+    if (intentName == "CheckAvailIntent") {
+        handleCheckAvailIntent(intent, session, callback)
     } else {
          throw "Invalid intent"
     }
@@ -79,14 +71,12 @@ function onSessionEnded(sessionEndedRequest, session) {
 
 }
 
-// ------- Skill specific logic -------
-
 function getWelcomeResponse(callback) {
-    var speechOutput = "Welcome! Do you want to hear about some facts?"
+    var speechOutput = "Welcome to Beneroan Laundry Applications! Would you like to check laundry machine availability?"
 
-    var reprompt = "Do you want to hear about some facts?"
+    var reprompt = "Would you like to check laundry machine availability?"
 
-    var header = "Get Info"
+    var header = "Check laundy machine availability"
 
     var shouldEndSession = false
 
@@ -99,9 +89,9 @@ function getWelcomeResponse(callback) {
 
 }
 
-function handleGetInfoIntent(intent, session, callback) {
+function handleCheckAvailIntent(intent, session, callback) {
 
-    var speechOutput = "We have an error"
+    var speechOutput = "The TAMS magical laundry server pulled an L. Please wait and try again."
 
     getJSON(function(data) {
         if (data != "ERROR") {
@@ -113,37 +103,20 @@ function handleGetInfoIntent(intent, session, callback) {
 }
 
 function url() {
-    return "http://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=Albert+Einstein"
-}
-
-function url2() {
-    return {
-        url: "https://api.nytimes.com/svc/books/v3/lists.json",
-        qs: {
-            "api-key" : "8430ae194d0a446a8b1b9b9d607b2acc",
-            "list" : "hardcover-fiction"
-        }
-    }
+    return "http://nationalpark.fun:5000/status/machine"
 }
 
 function getJSON(callback) {
-    // HTTP - WIKPEDIA
-    // request.get(url(), function(error, response, body) {
-    //     var d = JSON.parse(body)
-    //     var result = d.query.searchinfo.totalhits
-    //     if (result > 0) {
-    //         callback(result);
-    //     } else {
-    //         callback("ERROR")
-    //     }
-    // })
-
-    // HTTPS with NYT
-    request.get(url2(), function(error, response, body) {
+    request.get(url(), function(error, response, body) {
         var d = JSON.parse(body)
-        var result = d.results
-        if (result.length > 0) {
-            callback(result[0].book_details[0].title)
+        var result = d.free
+
+        if (result != undefined) {
+            if (result == true) {
+                callback("At least one of the laundry machines are open. Hurry before someone takes it!")
+            } else {
+                callback("Both of the laundry machines are currently in use. Check again soon.")
+            }
         } else {
             callback("ERROR")
         }
