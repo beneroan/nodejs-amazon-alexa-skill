@@ -49,23 +49,6 @@ function onLaunch(launchRequest, session, callback) {
 }
 
 /**
- * Called when the user specifies an intent for this skill.
- */
-function onIntent(intentRequest, session, callback) {
-
-    var intent = intentRequest.intent
-    var intentName = intentRequest.intent.name;
-
-    if (intentName == "CheckAvailIntent") {
-        handleCheckAvailIntent(intent, session, callback)
-    } else if (intentName == "CheckFireIntent") {
-        handleCheckFireIntent(intent, session, callback)
-    } else {
-         throw "Invalid intent"
-    }
-}
-
-/**
  * Called when the user ends the session.
  * Is not called when the skill returns shouldEndSession=true.
  */
@@ -91,11 +74,28 @@ function getWelcomeResponse(callback) {
 
 }
 
+/**
+ * Called when the user specifies an intent for this skill.
+ */
+function onIntent(intentRequest, session, callback) {
+
+    var intent = intentRequest.intent
+    var intentName = intentRequest.intent.name;
+
+    if (intentName == "CheckAvailIntent") {
+        handleCheckAvailIntent(intent, session, callback)
+    } else if (intentName == "CheckFireIntent") {
+        handleCheckFireIntent(intent, session, callback)
+    } else {
+         throw "Invalid intent"
+    }
+}
 
 /**
  * Called when the user invokes the CheckAvailIntent (to check availability of laundry machines).
  */
 function handleCheckAvailIntent(intent, session, callback) {
+    var wing = intent.slots.Wing.value;
 
     var speechOutput = "The TAMS magical laundry server pulled an L. Please wait and try again."
 
@@ -104,7 +104,7 @@ function handleCheckAvailIntent(intent, session, callback) {
             var speechOutput = data
         }
         callback(session.attributes, buildSpeechletResponseWithoutCard(speechOutput, "", true))
-    })
+    }, wing)
 
 }
 
@@ -141,9 +141,10 @@ function fireURL() {
 /**
  * Parse JSON data from availURL
  */
-function getAvailJSON(callback) {
+function getAvailJSON(callback, wing) {
     request.get(availURL(), function(error, response, body) {
         var d = JSON.parse(body)
+        // change to var result = d.wing.free after api is complete
         var result = d.free
 
         if (result != undefined) {
